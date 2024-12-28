@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+/*import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser'
 
@@ -63,4 +63,4 @@ function Contact() {
     );
 }
 
-export default Contact;
+export default Contact;*/
