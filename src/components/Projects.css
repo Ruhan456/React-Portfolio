@@ -1,0 +1,78 @@
+.projects {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.project-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.project-card {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 300px;
+    display: flex;
+    flex-direction: column; /* Ensures children stack vertically */
+    justify-content: space-between; /* Spaces out children evenly */
+    height: auto; /* Ensures consistent height for all cards */
+    text-align: left;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+.project-image {
+    width: 100%;
+    height: 180px; 
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.project-card h3 {
+    margin: 10px;
+    font-size: 1.2rem;
+}
+
+.project-card p {
+    margin: 10px;
+    font-size: 0.9rem;
+    color: #777777;
+    flex-grow: 1; /* Allows the description to take up remaining space */
+}
+
+
+.project-link {
+    margin-top: auto; /* Pushes the link to the bottom */
+    text-decoration: none;
+    font-weight: bold;
+    color: #61dafb;
+    text-align: center; /* Center the link */
+    display: block;
+    padding: 10px 0;
+}
+
+.project-link:hover {
+    color: #4fa3d1;
+    text-decoration: underline;
+}
+
+.project-video {
+    margin: 10px 0;
+}
+
+#projects-title {
+    padding-top: 10px;
+    /* Adjust based on the navbar height */
+    margin-top: -50px;
+    /* Pulls it back up visually */
+}

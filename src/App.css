@@ -1,0 +1,184 @@
+/* General resets */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+
+/* Dark Theme */
+body.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark .navbar {
+  background-color: #1e1e1e;
+  color: #61dafb;
+}
+
+body.dark .project-card {
+  background-color: #1e1e1e;
+}
+
+/* Light Theme */
+body.light {
+  background-color: #f4f4f4;
+  color: #121212;
+}
+
+body.light .navbar {
+  background-color: #ffffff;
+  color: #333333;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.light .project-card {
+  background-color: #ffffff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Navbar styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  position: fixed;
+  top: 0;
+  left:0;
+  right:0;
+  z-index: 1000;
+}
+
+.navbar .links a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+.navbar .theme-toggle-btn {
+  margin-left: 20px;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.navbar .theme-toggle-btn:hover {
+  color: #168dad;
+}
+
+/* Project Cards */
+.project-card {
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Contact Section */
+.contact {
+  text-align: center;
+  margin-top: 80px;
+  transition: background-color 0.3s ease;
+}
+
+.contact input,
+.contact textarea {
+  width: 80%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.contact button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #61dafb;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.contact button:hover {
+  background-color: #4fa3d1;
+}
+
+/* Global spacing container */
+.container {
+  margin: 0 auto; /* Center horizontally */
+  padding: 0 20px; /* Padding for small margins on the sides */
+  max-width: 1200px; /* Prevents the content from being too wide */
+  box-sizing: border-box;
+}
+
+/* Ensure body has no conflicting margin */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Other styles (dark/light themes) */
+body.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.light {
+  background-color: #f4f4f4;
+  color: #121212;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.main-content {
+  margin-top: 60px; /* Adjust this value based on the height of your navbar */
+}
+
+.section-divider {
+  width: 0; /* Adjust width as needed */
+  margin: 40px auto; /* Center the line and add spacing */
+  border: none; /* Remove default border styling */
+  height: 1px; /* Line thickness */
+  background-color: var(--divider-color); /* Line color (adjust for light/dark mode) */
+  opacity: 0.6; /* Slight transparency */
+  animation: grow-divider 2s forwards;
+}
+
+.foot{
+  width: 1; /* Adjust width as needed */
+  /* Remove default border styling */
+  height: 0px; /* Line thickness */
+  background-color: var(--divider-color); /* Line color (adjust for light/dark mode) */
+  opacity: 0.3; /* Slight transparency */
+
+}
+
+
+@keyframes grow-divider {
+  to {
+      width: 80%;
+  }
+}
+
+
+body.dark .section-divider {
+  background-color: #555; /* Dark mode line color */
+}
+
+body.light .section-divider{
+  background-color:#121212;
+}
