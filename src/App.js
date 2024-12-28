@@ -34,9 +34,9 @@ function App() {
                     <Skills />
                 </div>
                 <hr className="section-divider" />
-
-
-
+                <div id="contact">
+                    <Contact />
+                </div>
                 <hr className="foot"/>
                 <Footer />
 
