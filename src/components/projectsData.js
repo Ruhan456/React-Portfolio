@@ -11,7 +11,7 @@ const projects = [
         id: 2,
         title: "Emergency Responder",
         description: "Web application made using Flask and Pyserial, with the ability to communicate with an Arduino in real time. This device was a prototype for an application that can be used to report crimes to police in an organized manner.",
-        image: "https://img.freepik.com/free-vector/coming-soon-neon-advertisement-template_53876-116734.jpg", 
+        image: "../images/Emergancy.png", 
         link: "https://github.com/Ruhan456/Emergency-Responder.git",
         video: "", 
     },
