@@ -1,0 +1,31 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Slight transparency */
+    color: white;
+    z-index: 1000; /* Ensures navbar is above the About section */
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.dark-mode-toggle {
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: inherit;
+  }
+  
+  .dark-mode-toggle:hover {
+    text-decoration: underline;
+  }
+  
