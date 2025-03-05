@@ -33,7 +33,7 @@ const projects = [
         image: "../images/Synth.jpg", 
         link: "https://github.com/Ruhan456/Arduino-Synthesizer",
         video: "",
-        skills:["Arduino", "C++", ] 
+        skills:["Arduino", "C++"] 
     },
 
 ];
