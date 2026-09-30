@@ -6,60 +6,7 @@ import { places } from "./portfolioData";
 const GLOBE_CENTER = [-62, 38];
 const GLOBE_ZOOM = 1.35;
 const ROTATION_DEGREES_PER_SECOND = 3.6;
-
-const darkRasterStyle = {
-  version: 8,
-  projection: { type: "globe" },
-  sources: {
-    cartoDark: {
-      type: "raster",
-      tiles: [
-        "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-        "https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-        "https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-        "https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-      ],
-      tileSize: 256,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    },
-  },
-  layers: [
-    {
-      id: "carto-dark",
-      type: "raster",
-      source: "cartoDark",
-      minzoom: 0,
-      maxzoom: 20,
-    },
-  ],
-};
-
-const lightRasterStyle = {
-  version: 8,
-  projection: { type: "globe" },
-  sources: {
-    cartoLight: {
-      type: "raster",
-      tiles: [
-        "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-        "https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-        "https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-        "https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-      ],
-      tileSize: 256,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    },
-  },
-  layers: [
-    {
-      id: "carto-light",
-      type: "raster",
-      source: "cartoLight",
-      minzoom: 0,
-      maxzoom: 20,
-    },
-  ],
-};
+const MAP_STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
 
 function PicturesPage({ isDarkMode = true }) {
   const mapContainerRef = useRef(null);
@@ -67,8 +14,8 @@ function PicturesPage({ isDarkMode = true }) {
   const markersRef = useRef([]);
   const animationFrameRef = useRef(null);
   const longitudeRef = useRef(GLOBE_CENTER[0]);
-  const initialMapStyleRef = useRef(isDarkMode ? darkRasterStyle : lightRasterStyle);
   const [mapReady, setMapReady] = useState(false);
+  const [mapError, setMapError] = useState(false);
   const [isRotating, setIsRotating] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -102,19 +49,30 @@ function PicturesPage({ isDarkMode = true }) {
 
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
-      style: initialMapStyleRef.current,
+      style: MAP_STYLE_URL,
       center: GLOBE_CENTER,
       zoom: GLOBE_ZOOM,
       minZoom: 1.2,
       maxZoom: 14,
       attributionControl: false,
       renderWorldCopies: false,
+      canvasContextAttributes: { antialias: true },
     });
 
     mapRef.current = map;
 
-    const initializeGlobe = () => {
+    const applyGlobeProjection = () => {
       map.setProjection({ type: "globe" });
+    };
+
+    const handleMapError = () => {
+      if (!map.loaded()) {
+        setMapError(true);
+      }
+    };
+
+    const initializeGlobe = () => {
+      applyGlobeProjection();
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
       map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
       map.on("dragstart", () => setIsRotating(false));
@@ -143,14 +101,19 @@ function PicturesPage({ isDarkMode = true }) {
       });
 
       setMapReady(true);
+      setMapError(false);
     };
 
+    map.on("style.load", applyGlobeProjection);
+    map.on("error", handleMapError);
     map.once("load", initializeGlobe);
 
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      map.off("style.load", applyGlobeProjection);
+      map.off("error", handleMapError);
       map.off("load", initializeGlobe);
       markersRef.current.forEach(({ marker }) => marker.remove());
       markersRef.current = [];
@@ -158,19 +121,6 @@ function PicturesPage({ isDarkMode = true }) {
       mapRef.current = null;
     };
   }, []);
-
-  useEffect(() => {
-    const map = mapRef.current;
-
-    if (!mapReady || !map) {
-      return;
-    }
-
-    map.once("style.load", () => {
-      map.setProjection({ type: "globe" });
-    });
-    map.setStyle(isDarkMode ? darkRasterStyle : lightRasterStyle);
-  }, [isDarkMode, mapReady]);
 
   useEffect(() => {
     const closeOnEscape = (event) => {
@@ -277,6 +227,40 @@ function PicturesPage({ isDarkMode = true }) {
           </div>
           <div ref={mapContainerRef} className="maplibre-map" />
 
+          {!mapReady && !mapError && (
+            <div className="map-status" role="status">
+              <span className="map-status-spinner" aria-hidden="true" />
+              Loading the globe
+            </div>
+          )}
+
+          {mapError && (
+            <div className="map-status map-status-error" role="alert">
+              <strong>The globe could not load.</strong>
+              <span>Check your connection and refresh the page.</span>
+            </div>
+          )}
+
+          {mapReady && (
+            <div className="place-dock" aria-label="Featured places">
+              <span>Jump to</span>
+              <div>
+                {places.map((place) => (
+                  <button
+                    aria-label={`Open ${place.name}, ${place.category}`}
+                    className={selectedId === place.id ? "active" : ""}
+                    key={place.id}
+                    onClick={() => openPlaceGallery(place)}
+                    type="button"
+                  >
+                    <small>{place.category}</small>
+                    {place.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {isGalleryOpen && selectedPlace && (
             <section className="place-gallery" aria-label={`${selectedPlace.name} photos`}>
               <div className="place-gallery-header">
@@ -301,7 +285,7 @@ function PicturesPage({ isDarkMode = true }) {
               ) : (
                 <div className="photo-placeholder gallery-empty">
                   <strong>{selectedPlace.name}</strong>
-                  <span>Add photo paths to this place in portfolioData.js.</span>
+                  <span>Photos from this chapter are coming soon.</span>
                 </div>
               )}
 

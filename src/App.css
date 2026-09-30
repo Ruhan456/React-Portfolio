@@ -11,13 +11,20 @@
   --accent-cool: #7aa8ff;
   --danger: #ff7c7c;
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  --shadow-soft: 0 14px 44px rgba(0, 0, 0, 0.18);
+  --radius-card: 18px;
+  --radius-small: 12px;
 }
 
 body {
   margin: 0;
   font-family: Inter, Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(54, 196, 181, 0.1), transparent 28rem),
+    radial-gradient(circle at 88% 22%, rgba(122, 168, 255, 0.09), transparent 32rem),
+    var(--bg);
   color: var(--text);
+  min-height: 100vh;
 }
 
 body.light {
@@ -54,6 +61,14 @@ button {
   color: inherit;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 65%, transparent);
+  outline-offset: 3px;
+}
+
 main {
   overflow: hidden;
 }
@@ -66,11 +81,14 @@ main {
   display: flex;
   gap: 24px;
   justify-content: space-between;
-  left: 0;
-  padding: 14px clamp(18px, 4vw, 56px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  left: clamp(12px, 2vw, 28px);
+  padding: 11px 14px 11px 20px;
   position: fixed;
-  right: 0;
-  top: 0;
+  right: clamp(12px, 2vw, 28px);
+  top: 14px;
   z-index: 20;
 }
 
@@ -79,6 +97,17 @@ main {
   font-size: 0.98rem;
   font-weight: 800;
   white-space: nowrap;
+}
+
+.brand::before {
+  background: var(--accent);
+  border-radius: 999px;
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 14%, transparent);
+  content: "";
+  display: inline-block;
+  height: 8px;
+  margin-right: 10px;
+  width: 8px;
 }
 
 .links {
@@ -98,7 +127,7 @@ main {
 .submit-button,
 .back-link {
   align-items: center;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid transparent;
   cursor: pointer;
   display: inline-flex;
@@ -134,7 +163,21 @@ main {
 .hero-section {
   display: flex;
   min-height: 92vh;
+  position: relative;
   padding: 145px clamp(18px, 5vw, 72px) 80px;
+}
+
+.hero-section::before {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--line) 45%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--line) 45%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  content: "";
+  inset: 0;
+  mask-image: radial-gradient(circle at 50% 44%, black, transparent 68%);
+  opacity: 0.55;
+  pointer-events: none;
+  position: absolute;
 }
 
 .hero-intro {
@@ -142,6 +185,8 @@ main {
   margin: 0 auto;
   max-width: 980px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .eyebrow {
@@ -154,9 +199,12 @@ main {
 }
 
 .hero-intro h1 {
+  background: linear-gradient(110deg, var(--text) 20%, var(--accent-cool) 57%, var(--accent) 88%);
+  background-clip: text;
   font-size: clamp(3.4rem, 9vw, 8rem);
   line-height: 0.9;
   margin: 0;
+  color: transparent;
 }
 
 .hero-lede {
@@ -208,6 +256,7 @@ main {
 .primary-button,
 .submit-button {
   background: var(--accent);
+  box-shadow: 0 10px 28px rgba(54, 196, 181, 0.2);
   color: #06100f;
 }
 
@@ -251,7 +300,8 @@ main {
 
 .section-heading h2 {
   font-size: clamp(2rem, 4vw, 3.45rem);
-  line-height: 1;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
   margin: 0;
 }
 
@@ -262,8 +312,9 @@ main {
 }
 
 .segmented-control {
+  background: color-mix(in srgb, var(--panel) 74%, transparent);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 14px;
   display: inline-grid;
   gap: 4px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -275,7 +326,7 @@ main {
 .segmented-control button {
   background: transparent;
   border: 0;
-  border-radius: 6px;
+  border-radius: 10px;
   color: var(--muted);
   cursor: pointer;
   font-weight: 800;
@@ -292,7 +343,7 @@ main {
 
 .segmented-indicator {
   background: var(--text);
-  border-radius: 6px;
+  border-radius: 10px;
   bottom: 4px;
   left: 4px;
   position: absolute;
@@ -332,7 +383,7 @@ main {
 
 .project-card-shell::before {
   background: radial-gradient(circle at 50% 50%, rgba(54, 196, 181, 0.2), transparent 70%);
-  border-radius: 12px;
+  border-radius: 24px;
   bottom: -8px;
   content: "";
   filter: blur(8px);
@@ -358,7 +409,7 @@ main {
 .project-card-link {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
   display: grid;
   height: 100%;
@@ -500,7 +551,7 @@ main {
   align-items: center;
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   display: flex;
   justify-content: center;
   min-height: 420px;
@@ -535,7 +586,7 @@ main {
 .project-writeup-card {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   padding: 24px;
 }
 
@@ -584,7 +635,7 @@ main {
 .project-detail-gallery img {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   display: block;
   max-height: 520px;
   object-fit: contain;
@@ -601,7 +652,7 @@ main {
 .experience-card {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   overflow: hidden;
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
@@ -629,7 +680,7 @@ main {
   align-items: center;
   background: var(--bg-strong);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-small);
   display: flex;
   font-weight: 850;
   height: 56px;
@@ -713,9 +764,10 @@ main {
 }
 
 .skill-card {
-  background: var(--panel);
+  background: linear-gradient(145deg, var(--panel), color-mix(in srgb, var(--panel-soft) 62%, var(--panel)));
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
   padding: 24px;
 }
 
@@ -741,6 +793,7 @@ main {
 
 .pictures-intro h1 {
   font-size: clamp(2.4rem, 5vw, 4.8rem);
+  letter-spacing: -0.045em;
   line-height: 0.98;
   margin: 0;
   max-width: 900px;
@@ -759,9 +812,9 @@ main {
 
 .maplibre-card {
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 26px;
   box-shadow: var(--shadow);
-  min-height: 70vh;
+  min-height: max(70vh, 660px);
   overflow: hidden;
   position: relative;
 }
@@ -782,7 +835,7 @@ main {
 
 .maplibre-map {
   height: 100%;
-  min-height: 70vh;
+  min-height: max(70vh, 660px);
   width: 100%;
 }
 
@@ -798,9 +851,9 @@ main {
   align-items: center;
   display: flex;
   gap: 10px;
-  left: 16px;
+  left: 18px;
   position: absolute;
-  top: 16px;
+  top: 18px;
   z-index: 2;
 }
 
@@ -849,6 +902,114 @@ main {
   color: var(--accent);
 }
 
+.map-status {
+  align-items: center;
+  backdrop-filter: blur(18px);
+  background: color-mix(in srgb, var(--bg-strong) 78%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  display: flex;
+  font-size: 0.88rem;
+  font-weight: 800;
+  gap: 10px;
+  left: 50%;
+  padding: 12px 16px;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+}
+
+.map-status-error {
+  border-radius: var(--radius-small);
+  flex-direction: column;
+  max-width: 320px;
+  text-align: center;
+}
+
+.map-status-error span {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.map-status-spinner {
+  animation: map-spin 0.8s linear infinite;
+  border: 2px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  border-radius: 50%;
+  border-top-color: var(--accent);
+  height: 18px;
+  width: 18px;
+}
+
+@keyframes map-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.place-dock {
+  backdrop-filter: blur(18px);
+  background: rgba(7, 10, 15, 0.78);
+  border: 1px solid rgba(237, 242, 247, 0.16);
+  border-radius: 18px;
+  bottom: 18px;
+  color: #edf2f7;
+  display: flex;
+  gap: 14px;
+  left: 50%;
+  max-width: calc(100% - 170px);
+  padding: 8px 9px 8px 14px;
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.place-dock > span {
+  align-self: center;
+  color: rgba(237, 242, 247, 0.58);
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.place-dock > div {
+  display: flex;
+  gap: 6px;
+}
+
+.place-dock button {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  color: rgba(237, 242, 247, 0.82);
+  cursor: pointer;
+  display: grid;
+  font-size: 0.82rem;
+  font-weight: 800;
+  gap: 2px;
+  min-width: 86px;
+  padding: 8px 11px;
+  text-align: left;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.place-dock button small {
+  color: rgba(237, 242, 247, 0.48);
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.place-dock button:hover,
+.place-dock button.active {
+  background: rgba(54, 196, 181, 0.16);
+  border-color: rgba(54, 196, 181, 0.44);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
 .placemark-marker {
   background: transparent;
   border: 0;
@@ -891,7 +1052,8 @@ main {
 .place-gallery {
   background: rgba(15, 17, 23, 0.88);
   border: 1px solid rgba(54, 196, 181, 0.6);
-  border-radius: 8px;
+  backdrop-filter: blur(22px);
+  border-radius: 20px;
   box-shadow: 0 24px 90px rgba(0, 0, 0, 0.42);
   color: #edf2f7;
   left: 50%;
@@ -902,7 +1064,7 @@ main {
   top: 50%;
   transform: translate(-50%, -50%);
   width: min(92%, 760px);
-  z-index: 3;
+  z-index: 5;
 }
 
 .place-gallery-header {
@@ -918,7 +1080,6 @@ main {
 }
 
 .place-gallery-header h2 {
-  font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(1.45rem, 4vw, 2rem);
   line-height: 1.05;
   margin: 0 0 5px;
@@ -1013,7 +1174,8 @@ main {
 .contact-form {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
   padding: 24px;
 }
 
@@ -1025,7 +1187,7 @@ main {
 .form-textarea {
   background: var(--bg);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-small);
   color: var(--text);
   outline: none;
   padding: 14px;
@@ -1143,27 +1305,38 @@ main {
   .navbar {
     align-items: flex-start;
     flex-direction: column;
-    gap: 10px;
-    padding: 12px 16px;
+    gap: 8px;
+    padding: 11px 12px 9px;
   }
 
   .links {
+    flex-wrap: nowrap;
     justify-content: flex-start;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    width: 100%;
+  }
+
+  .links::-webkit-scrollbar {
+    display: none;
   }
 
   .links a,
   .theme-toggle-btn {
+    flex: 0 0 auto;
     min-height: 36px;
     padding: 10px 11px;
   }
 
   .hero-section {
     min-height: auto;
-    padding-top: 190px;
+    padding-top: 160px;
   }
 
   .project-page {
-    padding-top: 190px;
+    padding-top: 160px;
   }
 
   .section-shell {
@@ -1209,11 +1382,38 @@ main {
   }
 
   .pictures-page {
-    padding-top: 190px;
+    padding-top: 160px;
   }
 
   .maplibre-card,
   .maplibre-map {
-    min-height: 58vh;
+    min-height: 580px;
+  }
+
+  .place-dock {
+    bottom: 14px;
+    display: block;
+    max-width: calc(100% - 28px);
+    overflow-x: auto;
+    padding: 7px;
+    width: max-content;
+  }
+
+  .place-dock > span {
+    display: none;
+  }
+
+  .place-dock > div {
+    width: max-content;
+  }
+
+  .place-dock button {
+    min-width: 82px;
+  }
+
+  .place-gallery {
+    max-height: calc(100% - 48px);
+    padding: 16px;
+    width: calc(100% - 28px);
   }
 }
