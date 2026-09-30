@@ -6,8 +6,10 @@
     "@emailjs/browser": "^4.4.1",
     "cra-template": "1.2.0",
     "framer-motion": "^11.18.2",
+    "maplibre-gl": "^5.24.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router-dom": "^6.30.3",
     "react-scripts": "5.0.1"
   },
   "scripts": {

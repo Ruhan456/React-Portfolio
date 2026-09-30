@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
+import { profile } from "./portfolioData";
 
 function Contact() {
     const [name, setName] = useState('');
@@ -8,55 +9,64 @@ function Contact() {
     const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState('');
+    const [submitError, setSubmitError] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         setSubmitStatus('');
+        setSubmitError('');
 
-        const serviceId = 'service_13kmb0r';
-        const templateId = 'template_0g4516c';
-        const publicKey = 'o9FE-bOAjK7sOSzAZ';
+        const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID || 'service_13kmb0r';
+        const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'template_0g4516c';
+        const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'o9FE-bOAjK7sOSzAZ';
         const templateParams = {
+            name: name,
+            email: email,
             from_name: name,
             from_email: email,
+            reply_to: email,
+            to_email: profile.email,
+            to_name: profile.name,
             message: message,
         };
 
-        emailjs.send(serviceId, templateId, templateParams, publicKey)
-            .then((response) => {
-                console.log('Email sent successfully', response);
-                setName('');
-                setEmail('');
-                setMessage('');
-                setSubmitStatus('success');
-                
-                setTimeout(() => {
-                    setSubmitStatus('');
-                    setIsSubmitting(false);
-                }, 3000);
-            })
-            .catch((error) => {
-                console.error('Error sending email', error);
-                setSubmitStatus('error');
-                
-                setTimeout(() => {
-                    setSubmitStatus('');
-                    setIsSubmitting(false);
-                }, 3000);
+        try {
+            const response = await emailjs.send(serviceId, templateId, templateParams, {
+                publicKey,
             });
+            console.log('Email sent successfully', response);
+            setName('');
+            setEmail('');
+            setMessage('');
+            setSubmitStatus('success');
+        } catch (error) {
+            console.error('Error sending email', error);
+            setSubmitStatus('error');
+            setSubmitError(error?.text || error?.message || 'EmailJS rejected this request.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
         <motion.div 
-            className="contact container"
+            className="section-shell contact-section"
+            id="contact"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6 }}
         >
             <div className="contact-wrapper">
-                <h2 className="contact-title">Contact Me</h2>
-                
+                <div className="section-heading">
+                    <p className="eyebrow">Contact</p>
+                    <h2>Let’s build useful systems.</h2>
+                    <p>
+                        Reach out for software, firmware, automation, manufacturing, or hybrid
+                        engineering roles.
+                    </p>
+                </div>
                 <form onSubmit={handleSubmit} className="contact-form">
                     <div className="form-group">
                         <input 
@@ -102,7 +112,11 @@ function Contact() {
 
                     {submitStatus === 'error' && (
                         <div className="submit-message error">
-                            Failed to send message. Please try again.
+                            Failed to send message. Email me directly at{' '}
+                            <a href={`mailto:${profile.email}?subject=Portfolio%20contact%20from%20${encodeURIComponent(name || 'visitor')}&body=${encodeURIComponent(message)}`}>
+                                {profile.email}
+                            </a>
+                            {submitError && <small>{submitError}</small>}
                         </div>
                     )}
                     
@@ -118,8 +132,11 @@ function Contact() {
                 </form>
 
                 <div className="social-links">
+                    <a href={`mailto:${profile.email}`} className="text-link">
+                        {profile.email}
+                    </a>
                     <a 
-                        href="https://www.linkedin.com/in/ruhan-bhavsar-43a074292/" 
+                        href={profile.linkedin} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="social-link"
@@ -131,7 +148,7 @@ function Contact() {
                         />
                     </a>
                     <a 
-                        href="https://github.com/Ruhan456" 
+                        href={profile.github} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="social-link"

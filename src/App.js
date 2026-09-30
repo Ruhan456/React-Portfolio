@@ -1,48 +1,84 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Projects from "./components/Projects";
+import Hero from "./components/Hero";
+import Showcase from "./components/Showcase";
+import Experience from "./components/Experience";
+import Skills from "./components/Skills";
 import Contact from "./components/Contact";
-import Home from "./components/Home";
-import Skills from "./components/Skills"
-import Footer from "./components/footer"
+import ProjectDetail from "./components/ProjectDetail";
+import PicturesPage from "./components/PicturesPage";
 import "./App.css";
 
+function PortfolioHome() {
+  return (
+    <>
+      <Hero />
+      <Showcase />
+      <Experience />
+      <Skills />
+      <Contact />
+    </>
+  );
+}
+
+function ScrollToHash() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      window.setTimeout(() => {
+        const target = document.querySelector(location.hash);
+        if (target) {
+          const navbarHeight = document.querySelector("nav")?.offsetHeight || 0;
+          window.scrollTo({
+            top: target.getBoundingClientRect().top + window.scrollY - navbarHeight,
+            behavior: "smooth",
+          });
+        }
+      }, 80);
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [location.pathname, location.hash]);
+
+  return null;
+}
+
+function AppShell() {
+  const [darkMode, setDarkMode] = useState(true);
+
+  const toggleTheme = () => {
+    setDarkMode((currentMode) => !currentMode);
+  };
+
+  useEffect(() => {
+    document.body.className = darkMode ? "dark" : "light";
+  }, [darkMode]);
+
+  return (
+    <div className={`App ${darkMode ? "dark" : "light"}`}>
+      <Navbar toggleTheme={toggleTheme} isDarkMode={darkMode} />
+      <main>
+        <Routes>
+          <Route path="/" element={<PortfolioHome />} />
+          <Route path="/projects/:slug" element={<ProjectDetail />} />
+          <Route path="/pictures" element={<PicturesPage isDarkMode={darkMode} />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
+
 function App() {
-    const [darkMode, setDarkMode] = useState(true);
-
-    const toggleTheme = () => {
-        setDarkMode(!darkMode);
-    };
-
-    useEffect(() => {
-        document.body.className = darkMode ? "dark" : "light";
-    }, [darkMode]);
-
-    return (
-        <div className={`App ${darkMode ? "dark" : "light"}`}>
-            <Navbar toggleTheme={toggleTheme} isDarkMode={darkMode} />
-            <div className="main-content">
-                <div id="Home">
-                    <Home darkMode={darkMode} />
-                </div>
-                <hr className="section-divider" id="project-line" />
-                <div id="projects">
-                    <Projects />
-                </div>
-                <hr className="section-divider" />
-                <div id="Skills">
-                    <Skills />
-                </div>
-                <hr className="section-divider" />
-                <div id="contact">
-                    <Contact />
-                </div>
-                <hr className="foot"/>
-                <Footer />
-
-            </div>
-        </div>
-    );
+  return (
+    <BrowserRouter>
+      <ScrollToHash />
+      <AppShell />
+    </BrowserRouter>
+  );
 }
 
 export default App;
