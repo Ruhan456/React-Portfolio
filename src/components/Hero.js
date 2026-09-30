@@ -20,7 +20,8 @@ function Hero() {
         <h1>{profile.name}</h1>
         <p className="hero-lede">
           I build practical systems across software, firmware, automation, and mechanical design.
-          My work usually sits where code meets hardware and where ideas need to survive real use.
+          From motor-control validation and vehicle firmware to production tooling and full-stack
+          applications, my work sits where code meets hardware and ideas have to survive real use.
         </p>
 
         <div className="hero-chip-row" aria-label="Focus areas">

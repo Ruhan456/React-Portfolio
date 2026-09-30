@@ -60,8 +60,8 @@ function Showcase() {
         <p className="eyebrow">Selected Work</p>
         <h2>Engineering builds across code and hardware.</h2>
         <p>
-          Project cards now open into dedicated pages, so each build has room for context, photos,
-          links, tools, and the decisions behind it.
+          Explore software, firmware, automation, and mechanical projects with the context,
+          tools, and measured results behind each build.
         </p>
       </div>
 

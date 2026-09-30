@@ -30,11 +30,12 @@ function Experience() {
                 className="experience-toggle"
                 type="button"
                 aria-expanded={isOpen}
+                aria-controls={`experience-${index}`}
                 onClick={() => setOpenId(isOpen ? null : experience.company)}
               >
                 <span className="experience-badge">
                   {experience.logo ? (
-                    <img src={experience.logo} alt={`${experience.company} logo`} />
+                    <img src={experience.logo} alt="" aria-hidden="true" />
                   ) : (
                     experience.badge
                   )}
@@ -51,6 +52,7 @@ function Experience() {
                 {isOpen && (
                   <motion.div
                     className="experience-details"
+                    id={`experience-${index}`}
                     initial={reduceMotion ? false : { height: 0, opacity: 0 }}
                     animate={reduceMotion ? undefined : { height: "auto", opacity: 1 }}
                     exit={reduceMotion ? undefined : { height: 0, opacity: 0 }}

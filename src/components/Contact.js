@@ -50,7 +50,7 @@ function Contact() {
     };
 
     return (
-        <motion.div 
+        <motion.div
             className="section-shell contact-section"
             id="contact"
             initial={{ opacity: 0 }}
@@ -69,49 +69,54 @@ function Contact() {
                 </div>
                 <form onSubmit={handleSubmit} className="contact-form">
                     <div className="form-group">
-                        <input 
-                            type="text" 
-                            name="name" 
-                            placeholder="Your Name" 
-                            value={name} 
-                            onChange={(e) => setName(e.target.value)} 
-                            required 
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Your Name"
+                            aria-label="Your name"
+                            autoComplete="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
                             className="form-input"
                         />
                     </div>
-                    
+
                     <div className="form-group">
-                        <input 
-                            type="email" 
-                            name="email" 
-                            placeholder="Your Email" 
-                            value={email} 
-                            onChange={(e) => setEmail(e.target.value)} 
-                            required 
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Your Email"
+                            aria-label="Your email"
+                            autoComplete="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
                             className="form-input"
                         />
                     </div>
-                    
+
                     <div className="form-group">
-                        <textarea 
-                            name="message" 
-                            rows="4" 
-                            placeholder="Your Message" 
-                            value={message} 
-                            onChange={(e) => setMessage(e.target.value)} 
-                            required 
+                        <textarea
+                            name="message"
+                            rows="4"
+                            placeholder="Your Message"
+                            aria-label="Your message"
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            required
                             className="form-textarea"
                         />
                     </div>
 
                     {submitStatus === 'success' && (
-                        <div className="submit-message success">
+                        <div className="submit-message success" role="status">
                             Message sent successfully!
                         </div>
                     )}
 
                     {submitStatus === 'error' && (
-                        <div className="submit-message error">
+                        <div className="submit-message error" role="alert">
                             Failed to send message. Email me directly at{' '}
                             <a href={`mailto:${profile.email}?subject=Portfolio%20contact%20from%20${encodeURIComponent(name || 'visitor')}&body=${encodeURIComponent(message)}`}>
                                 {profile.email}
@@ -119,7 +124,7 @@ function Contact() {
                             {submitError && <small>{submitError}</small>}
                         </div>
                     )}
-                    
+
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -135,28 +140,28 @@ function Contact() {
                     <a href={`mailto:${profile.email}`} className="text-link">
                         {profile.email}
                     </a>
-                    <a 
-                        href={profile.linkedin} 
-                        target="_blank" 
+                    <a
+                        href={profile.linkedin}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="social-link"
                     >
-                        <img 
-                            src="../images/linkedin.png" 
-                            alt="LinkedIn" 
-                            className="social-icon" 
+                        <img
+                            src="../images/linkedin.png"
+                            alt="LinkedIn"
+                            className="social-icon"
                         />
                     </a>
-                    <a 
-                        href={profile.github} 
-                        target="_blank" 
+                    <a
+                        href={profile.github}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="social-link"
                     >
-                        <img 
-                            src="../images/github.png" 
-                            alt="GitHub" 
-                            className="social-icon" 
+                        <img
+                            src="../images/github.png"
+                            alt="GitHub"
+                            className="social-icon"
                         />
                     </a>
                 </div>

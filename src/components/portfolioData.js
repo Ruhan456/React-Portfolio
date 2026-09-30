@@ -11,6 +11,10 @@ export const profile = {
       href: "/resumes/RuhanBhavsarSWResume.pdf",
     },
     {
+      label: "Firmware Resume",
+      href: "/resumes/RuhanBhavsarFWResume.pdf",
+    },
+    {
       label: "Mechanical Resume",
       href: "/resumes/RuhanBhavsarResume.pdf",
     },
@@ -330,16 +334,26 @@ export const projects = [
 
 export const experiences = [
   {
+    company: "onsemi",
+    role: "Embedded Systems Validation Developer (Motor Control)",
+    period: "Sept 2026 - Dec 2026",
+    location: "Waterloo, ON",
+    badge: "on",
+    highlights: [
+      "Working on embedded systems validation for motor-control applications.",
+    ],
+  },
+  {
     company: "MPI Morheat",
-    role: "Engineering Intern",
+    role: "Engineering Automation Intern",
     period: "Jan 2026 - Apr 2026",
     location: "Toronto, ON",
     badge: "MM",
     logo: "/images/MPI.webp",
     highlights: [
-      "Built React configurators and drawing automation tools for custom heater proposals.",
-      "Developed an STM32-based automated label cutter for low-cost production automation.",
-      "Designed and fabricated plate-forming equipment for repeatable heater manufacturing.",
+      "Built React configurators for flange, screwplug, and PTFE heater drawings, cutting custom drawing generation time by 95% from about 20 minutes to 1 minute.",
+      "Developed a three-axis STM32 label cutter for under $500 using stepper motors and 3D-printed components, saving 5-10 hours of manual work each week.",
+      "Designed and fabricated an aluminum plate-bending roller that reduced forming time from 20 minutes to 5 minutes per plate.",
     ],
   },
   {
@@ -350,9 +364,9 @@ export const experiences = [
     badge: "VX",
     logo: "/images/Vexos.webp",
     highlights: [
-      "Redesigned SMT tooling in SolidWorks and SolidWorks PDM for local machining.",
-      "Built manufacturing tools with Python, CAD, and 3D printing to reduce equipment downtime.",
-      "Created process tooling and documentation that improved operator consistency.",
+      "Built manufacturing tools with Python, SolidWorks, and 3D printing that reduced equipment downtime by 40 hours per month.",
+      "Redesigned an SMT rework nozzle in SolidWorks and SolidWorks PDM, cutting supplier lead time from 6 weeks to 1 week and saving about $700 per unit.",
+      "Automated the calibration workflow in Asset Essentials, reducing overdue work orders by 30% while maintaining 100% compliance with industry standards.",
     ],
   },
   {
@@ -363,9 +377,9 @@ export const experiences = [
     badge: "MS",
     logo: "/images/MidSun.webp",
     highlights: [
-      "Maintained embedded firmware across vehicle microcontrollers.",
-      "Built Pytest-based hardware-in-the-loop testing to validate firmware on vehicle hardware.",
-      "Worked with C, Python, SCons, Vagrant, and Git-based embedded workflows.",
+      "Maintained embedded firmware for 8 vehicle microcontrollers, including ADC sampling and real-time tasks with a 10 ms synchronization target.",
+      "Built a Pytest-based hardware-in-the-loop framework that reduced manual firmware testing time by 80%.",
+      "Developed and tested embedded systems in C and Python using SCons, Vagrant, and Git-based workflows.",
     ],
   },
 ];
@@ -407,11 +421,11 @@ export const places = [
 export const skillGroups = [
   {
     title: "Software",
-    skills: ["React", "Flask", "Node.js", "TypeScript", "Python", "SQL", "MongoDB"],
+    skills: ["React", "Flask", "Node.js", "TypeScript", "Python", "Kotlin", "Jetpack Compose", "PyTorch", "SQL", "MongoDB"],
   },
   {
     title: "Embedded",
-    skills: ["C", "C++", "STM32", "ESP32", "Arduino", "ADCs", "PySerial", "SCons"],
+    skills: ["C", "C++", "ARM Thumb Assembly", "STM32F401", "ARM Cortex-M4", "RTOS", "ESP32", "Arduino", "Pytest", "SCons"],
   },
   {
     title: "Mechanical",
