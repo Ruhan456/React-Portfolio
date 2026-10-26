@@ -1,0 +1,205 @@
+.card-carousel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.card-carousel__stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  container-type: size;
+  perspective: 600px;
+  perspective-origin: 50% 50%;
+  touch-action: pan-y;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.card-carousel__stage:active {
+  cursor: grabbing;
+}
+
+.card-carousel__card {
+  --card-tint: var(--ground-high);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--carousel-card-width, min(78vw, clamp(280px, 50cqh, 420px)));
+  aspect-ratio: 340 / 440;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--radius-card) + 4px);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  translate: -50% -50%;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card-carousel__card:focus-visible {
+  outline-offset: 6px;
+}
+
+.card-carousel__face {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.card-carousel__shade {
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  border-radius: inherit;
+  background: var(--ground);
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.card-carousel__tail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  background-color: var(--card-tint);
+  background-image: var(--tail-image, none);
+  background-size: 100% 100%;
+  background-blend-mode: soft-light;
+  will-change: opacity;
+}
+
+.card-carousel__tail--start {
+  right: calc(100% - 2px);
+  transform: scaleX(-1);
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 40%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0%, #000 40%, transparent 100%);
+}
+
+.card-carousel__tail--end {
+  left: calc(100% - 2px);
+  transform: scaleX(-1);
+  -webkit-mask-image: linear-gradient(to left, #000 0%, #000 40%, transparent 100%);
+  mask-image: linear-gradient(to left, #000 0%, #000 40%, transparent 100%);
+}
+
+.card-carousel__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  translate: -50% 0;
+  color: var(--ink-soft);
+  font-size: var(--size-small);
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+  pointer-events: none;
+}
+
+.card-carousel__hint.is-visible {
+  opacity: 1;
+}
+
+.card-carousel__chrome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 16px 0 calc(20px + env(safe-area-inset-bottom));
+}
+
+.card-carousel__nav {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 200ms ease, background-color 200ms ease, opacity 200ms ease;
+}
+
+.card-carousel__nav svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.card-carousel__nav:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--ink) 40%, transparent);
+  background: var(--ground-raised);
+}
+
+.card-carousel__nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.card-carousel__counter {
+  display: grid;
+  gap: 8px;
+  width: 132px;
+  justify-items: center;
+}
+
+.card-carousel__count {
+  font-size: var(--size-small);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.card-carousel__count-total {
+  color: var(--ink-soft);
+}
+
+.card-carousel__track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--ink) 14%, transparent);
+  overflow: hidden;
+}
+
+.card-carousel__progress {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: 0 50%;
+  will-change: transform;
+}
+
+@media (max-width: 560px) {
+  .card-carousel__card {
+    width: var(--carousel-card-width, min(78vw, 66cqh));
+  }
+}
+
+@media (hover: none) {
+  .card-carousel__stage {
+    cursor: default;
+  }
+}

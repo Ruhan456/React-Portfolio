@@ -1,0 +1,75 @@
+.page-body {
+  margin-top: clamp(72px, 10vw, 144px);
+}
+
+.page-section + .page-section {
+  margin-top: var(--section-gap);
+}
+
+.section-title {
+  font-size: var(--size-title);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.meta {
+  color: var(--ink-soft);
+  font-size: var(--size-small);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ground-high);
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.pill:hover {
+  background: color-mix(in srgb, var(--ground-high) 70%, var(--ink) 30%);
+}
+
+.pill--accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.pill--accent:hover {
+  background: color-mix(in srgb, var(--accent) 85%, var(--ink) 15%);
+}
+
+.pill:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.text-link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+  transition: text-decoration-color 200ms ease;
+}
+
+.text-link:hover {
+  text-decoration-color: var(--accent);
+}

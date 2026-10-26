@@ -1,0 +1,240 @@
+.places-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  gap: clamp(24px, 3vw, 48px);
+  align-items: start;
+}
+
+.places-map {
+  position: relative;
+  height: clamp(460px, calc(100vh - var(--header-height) - 120px), 860px);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--ground-raised);
+}
+
+.places-map__canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.places-map__toolbar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+}
+
+.places-map__status {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  background: var(--ground-raised);
+}
+
+.places-map__status--error span {
+  max-width: 36ch;
+}
+
+.places-map__spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid var(--ground-high);
+  border-top-color: var(--accent);
+  animation: places-spin 900ms linear infinite;
+}
+
+@keyframes places-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.places-marker {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.places-marker span {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--ground);
+  transition: transform 220ms var(--ease-out);
+}
+
+.places-marker:hover span,
+.places-marker.is-active span {
+  transform: scale(1.5);
+}
+
+.places-marker.is-active span {
+  background: var(--ink);
+}
+
+.places-map .maplibregl-ctrl-group {
+  background: var(--ground-high);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.places-map .maplibregl-ctrl-group button {
+  width: 40px;
+  height: 40px;
+}
+
+.places-map .maplibregl-ctrl-group button + button {
+  border-top: 0;
+}
+
+.places-map .maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  filter: invert(1);
+}
+
+.places-map .maplibregl-ctrl-attrib {
+  background: color-mix(in srgb, var(--ground) 80%, transparent);
+  color: var(--ink-soft);
+}
+
+.places-map .maplibregl-ctrl-attrib a {
+  color: var(--ink-soft);
+}
+
+.places-map .maplibregl-ctrl-attrib-button {
+  filter: invert(1);
+}
+
+.places-aside {
+  display: grid;
+  gap: 16px;
+}
+
+.places-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.places-list__item {
+  width: 100%;
+  display: grid;
+  gap: 6px;
+  padding: 20px 24px;
+  border: 0;
+  border-radius: var(--radius-card);
+  background: var(--ground-raised);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+
+.places-list__item:hover,
+.places-list__item.is-selected {
+  background: var(--ground-high);
+}
+
+.places-list__name {
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.places-list__item.is-selected .places-list__name {
+  color: var(--accent);
+}
+
+.places-list__meta {
+  color: var(--ink-soft);
+  font-size: var(--size-small);
+}
+
+.places-list__note {
+  margin-top: 8px;
+  max-width: 48ch;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.places-gallery {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  border-radius: var(--radius-card);
+  background: var(--ground-high);
+}
+
+.places-gallery__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.places-gallery__header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.places-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.places-gallery__photo {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--ground-raised);
+}
+
+.places-gallery__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.places-gallery__empty {
+  padding: 32px 20px;
+  border-radius: var(--radius-card);
+  background: var(--ground-raised);
+  color: var(--ink-soft);
+}
+
+@media (max-width: 1024px) {
+  .places-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .places-map {
+    height: min(68vh, 620px);
+    min-height: 380px;
+  }
+
+  .places-list {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}

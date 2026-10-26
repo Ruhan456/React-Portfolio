@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import SiteHeader from "./shell/SiteHeader";
 import HomeBox from "./home/HomeBox";
@@ -9,7 +9,8 @@ import AboutPage from "./pages/AboutPage";
 import SkillsPage from "./pages/SkillsPage";
 import ContactPage from "./pages/ContactPage";
 import ResumePage from "./pages/ResumePage";
-import PlacesPage from "./pages/PlacesPage";
+
+const PlacesPage = lazy(() => import("./pages/PlacesPage"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -40,7 +41,14 @@ function App() {
         <Route path="/skills" element={<SkillsPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/resume" element={<ResumePage />} />
-        <Route path="/places" element={<PlacesPage />} />
+        <Route
+          path="/places"
+          element={
+            <Suspense fallback={<main className="page" />}>
+              <PlacesPage />
+            </Suspense>
+          }
+        />
         <Route path="/projects/:slug" element={<LegacyProjectRedirect />} />
         <Route path="/pictures" element={<Navigate to="/places" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,0 +1,89 @@
+.resume-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+  gap: clamp(32px, 4vw, 64px);
+  align-items: start;
+}
+
+.resume-choices {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.resume-choice {
+  display: grid;
+  gap: 16px;
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: var(--radius-card);
+  background: var(--ground-raised);
+  transition: background-color 240ms ease;
+}
+
+.resume-choice--selected {
+  background: var(--ground-high);
+}
+
+.resume-choice__title {
+  font-size: clamp(3rem, 6.4vw, 6rem);
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+}
+
+.resume-choice__select {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: color-mix(in srgb, var(--ink) 55%, var(--ground));
+  transition: color 200ms ease;
+}
+
+.resume-choice__select:hover,
+.resume-choice--selected .resume-choice__select {
+  color: var(--ink);
+}
+
+.resume-choice__note {
+  font-size: 1.0625rem;
+}
+
+.resume-preview {
+  position: sticky;
+  top: calc(var(--header-height) + 24px);
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.resume-preview iframe {
+  display: block;
+  width: 100%;
+  height: calc(100vh - var(--header-height) - 96px);
+  min-height: 560px;
+  border: 0;
+  border-radius: var(--radius-card);
+  background: var(--ground-raised);
+}
+
+@media (max-width: 1024px) {
+  .resume-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-preview {
+    display: none;
+  }
+
+  .resume-choice__select {
+    color: var(--ink);
+  }
+}
