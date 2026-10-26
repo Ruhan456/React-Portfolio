@@ -1,0 +1,101 @@
+:root {
+  --ground: #0d0e0f;
+  --ground-raised: #16181a;
+  --ground-high: #1f2225;
+  --ink: #eceae4;
+  --ink-soft: #a9a7a0;
+  --accent: #ff7a2f;
+  --accent-ink: #120a04;
+
+  --font: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --size-display: clamp(3rem, 8.4vw, 8.5rem);
+  --size-title: clamp(1.75rem, 3.2vw, 3rem);
+  --size-body: 1.0625rem;
+  --size-small: 0.875rem;
+
+  --margin: clamp(16px, 2.4vw, 32px);
+  --header-height: 72px;
+  --section-gap: clamp(120px, 16vw, 240px);
+  --radius-card: 6px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration: 480ms;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--size-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1,
+h2 {
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  font-weight: 700;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.page {
+  min-height: 100vh;
+  padding: calc(var(--header-height) + 48px) var(--margin) 96px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
