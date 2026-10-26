@@ -1,11 +1,19 @@
 .hb {
-  --hb-floor: color-mix(in srgb, var(--ground) 72%, black);
-  --hb-wall: var(--ground-raised);
-  --hb-wall-dim: color-mix(in srgb, var(--ground-raised) 62%, var(--ground));
-  --hb-wall-dark: color-mix(in srgb, var(--ground) 70%, black);
-  --hb-rim: color-mix(in srgb, var(--ground-high) 82%, var(--ink));
+  /* Idle edge colour of the cards and the case rims. Swap for e.g. #a6e04a for a lime rim. */
+  --rim: var(--accent);
+  --rim-edge: color-mix(in srgb, var(--rim) 64%, var(--ground));
+  --rim-soft: color-mix(in srgb, var(--rim) 30%, var(--ground));
+  --rim-faint: color-mix(in srgb, var(--rim) 12%, transparent);
+
+  --hb-black: color-mix(in srgb, var(--ground) 55%, black);
+  --hb-floor: color-mix(in srgb, var(--ground) 50%, black);
+  --hb-wall: color-mix(in srgb, var(--ground) 92%, var(--ground-raised));
+  --hb-wall-dim: color-mix(in srgb, var(--ground) 70%, black);
+  --hb-wall-dark: color-mix(in srgb, var(--ground) 48%, black);
+  --hb-rim-top: color-mix(in srgb, var(--rim) 10%, var(--hb-black));
   --hb-line: color-mix(in srgb, var(--ink) 9%, transparent);
-  --hb-lift: 124px;
+  --hb-lift: 58px;
+  --hb-radius: 12px;
 
   position: relative;
   height: 100vh;
@@ -14,6 +22,36 @@
   overflow: hidden;
   isolation: isolate;
   background: var(--ground);
+}
+
+/* Each card carries its own highlight colour */
+
+.hb [data-card="work"] {
+  --hl: #ff7a2f;
+}
+
+.hb [data-card="experience"] {
+  --hl: #ffb547;
+}
+
+.hb [data-card="about"] {
+  --hl: #ff6b5e;
+}
+
+.hb [data-card="skills"] {
+  --hl: #ff4f8b;
+}
+
+.hb [data-card="places"] {
+  --hl: #a68bff;
+}
+
+.hb [data-card="resume"] {
+  --hl: #4fd3e6;
+}
+
+.hb [data-card="contact"] {
+  --hl: #b5e35a;
 }
 
 /* Intro */
@@ -74,7 +112,9 @@
 .hb-face,
 .hb-shadow,
 .hb-spill,
-.hb-lid {
+.hb-lid,
+.hb-gloss,
+.hb-mirror {
   position: absolute;
   left: 0;
   top: 0;
@@ -89,28 +129,54 @@
   transform-style: preserve-3d;
 }
 
+/* Glossy floor with a mirrored copy of the case below it */
+
+.hb-gloss {
+  background: radial-gradient(
+    32% 24% at 50% 47%,
+    color-mix(in srgb, var(--ground) 82%, transparent),
+    color-mix(in srgb, var(--ground) 93%, transparent) 50%,
+    var(--ground) 100%
+  );
+  pointer-events: none;
+}
+
+.hb-mirror {
+  transform: translateZ(-4px) scaleZ(-1);
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.hb-mirror .hb-face,
+.hb-mirror .hb-card__face,
+.hb-mirror .hb-card__back {
+  backface-visibility: visible;
+}
+
 .hb-shadow {
   border-radius: 50%;
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, black 72%, transparent),
-    color-mix(in srgb, black 34%, transparent) 62%,
+    color-mix(in srgb, black 70%, transparent),
+    color-mix(in srgb, black 30%, transparent) 62%,
     transparent
   );
   pointer-events: none;
 }
+
+/* Case faces: deep black, rims pick up the edge colour */
 
 .hb-face--floor {
   background:
     linear-gradient(
       to bottom,
       transparent 0 11%,
-      var(--hb-line) 11% calc(11% + 1px),
+      var(--rim-faint) 11% calc(11% + 1px),
       transparent calc(11% + 1px) 89%,
-      var(--hb-line) 89% calc(89% + 1px),
+      var(--rim-faint) 89% calc(89% + 1px),
       transparent calc(89% + 1px)
     ),
-    linear-gradient(to bottom, color-mix(in srgb, black 40%, var(--hb-floor)), var(--hb-floor) 45%);
+    linear-gradient(to bottom, color-mix(in srgb, black 50%, var(--hb-floor)), var(--hb-floor) 45%);
 }
 
 .hb-face--inner-lit {
@@ -118,7 +184,7 @@
 }
 
 .hb-face--inner-mid {
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--hb-wall-dim) 70%, black), var(--hb-wall-dark));
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--hb-wall-dim) 80%, black), var(--hb-wall-dark));
 }
 
 .hb-face--inner-dark {
@@ -126,61 +192,97 @@
 }
 
 .hb-face--side {
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--hb-wall-dim) 80%, black), var(--hb-wall-dark));
+  background: linear-gradient(to bottom, var(--hb-wall-dim), var(--hb-wall-dark));
+}
+
+.hb-face--out-right {
+  box-shadow: inset 1px 0 0 var(--rim-soft);
 }
 
 .hb-face--rim {
-  background: var(--hb-rim);
+  background: var(--hb-rim-top);
+}
+
+.hb-face--rim-front {
+  background:
+    linear-gradient(to top, var(--rim-edge) 0 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, var(--rim-soft) 0 1px, transparent 1px),
+    var(--hb-rim-top);
+}
+
+.hb-face--rim-back {
+  background:
+    linear-gradient(to bottom, var(--rim-soft) 0 1.5px, transparent 1.5px),
+    var(--hb-rim-top);
+}
+
+.hb-face--rim-left {
+  background:
+    linear-gradient(to right, var(--rim-edge) 0 1.5px, transparent 1.5px),
+    var(--hb-rim-top);
+}
+
+.hb-face--rim-right {
+  background:
+    linear-gradient(to left, var(--rim-edge) 0 1.5px, transparent 1.5px),
+    linear-gradient(to right, var(--rim-soft) 0 1px, transparent 1px),
+    var(--hb-rim-top);
 }
 
 .hb-face--front {
   display: grid;
   place-items: center;
   background:
-    linear-gradient(to bottom, color-mix(in srgb, var(--ink) 16%, transparent), transparent 2px),
-    linear-gradient(to bottom, var(--ground-high), var(--hb-wall) 70%, color-mix(in srgb, var(--hb-wall) 80%, black));
+    linear-gradient(to bottom, var(--rim-soft) 0 1px, transparent 1px),
+    linear-gradient(to bottom, var(--hb-wall), var(--hb-wall-dim) 75%, var(--hb-wall-dark));
+  box-shadow: inset -1px 0 0 var(--rim-soft);
 }
 
 .hb-face--lid-inner {
-  background:
-    linear-gradient(var(--hb-line), var(--hb-line)) 50% 50% / calc(100% - 56px) 1px no-repeat,
-    linear-gradient(to top, var(--hb-wall), color-mix(in srgb, var(--hb-wall) 60%, black));
+  background: linear-gradient(to top, var(--hb-wall-dim), var(--hb-wall-dark));
   box-shadow:
-    inset 0 0 0 1px var(--hb-line),
-    inset 0 0 0 22px color-mix(in srgb, var(--hb-wall) 80%, black);
+    inset 0 0 0 1px var(--rim-faint),
+    inset 0 0 0 20px color-mix(in srgb, var(--hb-wall-dark) 70%, black),
+    inset 0 0 0 21px var(--rim-faint);
 }
 
 .hb-face--lid-outer {
   background: var(--hb-wall-dark);
 }
 
+.hb-face--lid-edge {
+  background:
+    linear-gradient(to bottom, var(--rim-edge) 0 1.5px, transparent 1.5px),
+    var(--hb-rim-top);
+}
+
 .hb-print {
   display: flex;
   align-items: baseline;
   gap: 14px;
-  color: color-mix(in srgb, var(--ink-soft) 70%, var(--ground-high));
+  color: var(--rim-soft);
   font-size: 23px;
   font-weight: 500;
   letter-spacing: -0.01em;
   white-space: nowrap;
-  text-shadow: 0 1px 0 color-mix(in srgb, black 60%, transparent);
 }
 
 .hb-print strong {
-  color: var(--ink);
+  color: var(--rim-edge);
   font-weight: 700;
 }
 
 .hb-print__slash {
-  color: var(--accent);
+  color: var(--rim-edge);
 }
 
-/* Accent light spilled on the floor under the lifted card */
+/* Highlight-coloured light thrown on the floor by the lifted card */
 
 .hb-spill {
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, var(--accent) 34%, transparent),
+    color-mix(in srgb, var(--hl) 42%, transparent),
+    color-mix(in srgb, var(--hl) 12%, transparent) 60%,
     transparent
   );
   opacity: 0;
@@ -192,7 +294,48 @@
   opacity: 1;
 }
 
-/* Cards */
+/* Cards: glass slabs with a lit rim */
+
+.hb-card,
+.hb-tab {
+  --edge: var(--rim-edge);
+  --edge-hi: color-mix(in srgb, var(--rim) 86%, var(--ground));
+  --edge-lo: color-mix(in srgb, var(--rim) 26%, var(--ground));
+  --etch: color-mix(in srgb, var(--rim) 56%, var(--ground));
+  --glass: color-mix(in srgb, color-mix(in srgb, var(--rim) 4%, var(--hb-black)) 88%, transparent);
+  --glare: color-mix(in srgb, var(--rim) 30%, transparent);
+  --inner-glow: color-mix(in srgb, var(--rim) 9%, transparent);
+  --bloom: transparent;
+  --bloom-wide: transparent;
+}
+
+.hb-card.is-active,
+.hb-tab:active,
+.hb-tab:focus-visible {
+  --edge: var(--hl);
+  --edge-hi: color-mix(in srgb, var(--hl) 72%, white);
+  --edge-lo: color-mix(in srgb, var(--hl) 62%, black);
+  --etch: color-mix(in srgb, var(--hl) 88%, white);
+  --glass: color-mix(in srgb, color-mix(in srgb, var(--hl) 20%, black) 92%, transparent);
+  --glare: color-mix(in srgb, var(--hl) 48%, transparent);
+  --inner-glow: color-mix(in srgb, var(--hl) 26%, transparent);
+  --bloom: color-mix(in srgb, var(--hl) 55%, transparent);
+  --bloom-wide: color-mix(in srgb, var(--hl) 20%, transparent);
+}
+
+@media (hover: hover) {
+  .hb-tab:hover {
+    --edge: var(--hl);
+    --edge-hi: color-mix(in srgb, var(--hl) 72%, white);
+    --edge-lo: color-mix(in srgb, var(--hl) 62%, black);
+    --etch: color-mix(in srgb, var(--hl) 88%, white);
+    --glass: color-mix(in srgb, color-mix(in srgb, var(--hl) 30%, black) 92%, transparent);
+    --glare: color-mix(in srgb, var(--hl) 40%, transparent);
+    --inner-glow: color-mix(in srgb, var(--hl) 38%, transparent);
+    --bloom: color-mix(in srgb, var(--hl) 55%, transparent);
+    --bloom-wide: color-mix(in srgb, var(--hl) 20%, transparent);
+  }
+}
 
 .hb-card {
   position: absolute;
@@ -211,6 +354,10 @@
   outline: none;
 }
 
+.hb-card--ghost {
+  pointer-events: none;
+}
+
 .hb-card__body {
   position: absolute;
   inset: 0;
@@ -219,41 +366,87 @@
 }
 
 .hb-card.is-active .hb-card__body {
-  transform: translate3d(0, calc(var(--hb-lift) * -1), 10px);
+  transform: translate3d(0, calc(var(--hb-lift) * -1), 6px);
+  will-change: transform;
+}
+
+.hb-card__face,
+.hb-card__ring,
+.hb-card__back {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--hb-radius);
+  transition:
+    background-color var(--duration) var(--ease-out),
+    border-color var(--duration) var(--ease-out),
+    box-shadow var(--duration) var(--ease-out),
+    color var(--duration) var(--ease-out);
+}
+
+.hb-card__ring {
+  border: 2px solid;
+  border-color: var(--edge) var(--edge-lo) var(--edge-lo) var(--edge);
+}
+
+.hb-card__edge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  transition: background-color var(--duration) var(--ease-out);
+}
+
+.hb-card__edge--top {
+  background: linear-gradient(to bottom, var(--edge-lo), var(--edge) 40%, var(--edge-hi));
+}
+
+.hb-card__edge--side {
+  background: linear-gradient(to right, var(--edge-lo), var(--edge) 50%, var(--edge-hi));
+}
+
+.hb-card__back {
+  border: 2px solid var(--edge-lo);
+  background: color-mix(in srgb, var(--hb-black) 88%, transparent);
 }
 
 .hb-card__face {
-  position: absolute;
-  inset: 0;
   display: flex;
   flex-direction: column;
-  padding: 18px 20px;
-  border-radius: var(--radius-card);
-  background:
-    linear-gradient(to bottom, color-mix(in srgb, var(--ink) 7%, transparent), transparent 40%),
-    var(--ground-high);
-  box-shadow: inset 0 0 0 1px var(--hb-line);
-  color: var(--ink);
+  overflow: hidden;
+  padding: 16px 18px;
+  border: 1.5px solid;
+  border-color: var(--edge-hi) var(--edge-lo) var(--edge-lo) var(--edge-hi);
+  background-color: var(--glass);
+  background-image:
+    linear-gradient(150deg, color-mix(in srgb, white 7%, transparent), transparent 34%),
+    linear-gradient(to top, color-mix(in srgb, black 40%, transparent), transparent 55%);
+  box-shadow:
+    inset 0 0 22px var(--inner-glow),
+    inset 1px 1px 0 color-mix(in srgb, var(--edge-hi) 40%, transparent),
+    0 0 18px 1px var(--bloom),
+    0 0 64px 10px var(--bloom-wide);
+  color: var(--etch);
   text-align: left;
   backface-visibility: hidden;
-  transition:
-    background-color var(--duration) var(--ease-out),
-    color var(--duration) var(--ease-out),
-    box-shadow var(--duration) var(--ease-out),
-    filter var(--duration) var(--ease-out);
+}
+
+.hb-card__face::before {
+  content: "";
+  position: absolute;
+  top: 17%;
+  right: -12%;
+  width: 135%;
+  height: 22%;
+  background: linear-gradient(to left, var(--glare), color-mix(in srgb, var(--glare) 40%, transparent) 45%, transparent 85%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 45%, black 55%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 45%, black 55%, transparent);
+  transform: rotate(-28deg);
+  pointer-events: none;
+  transition: opacity var(--duration) var(--ease-out);
 }
 
 .hb-world.has-active .hb-card:not(.is-active) .hb-card__face {
-  filter: brightness(0.72);
-}
-
-.hb-card.is-active .hb-card__face {
-  background: var(--accent);
-  color: var(--accent-ink);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, white 30%, transparent),
-    0 0 36px 4px color-mix(in srgb, var(--accent) 45%, transparent),
-    0 0 90px 10px color-mix(in srgb, var(--accent) 18%, transparent);
+  color: color-mix(in srgb, var(--etch) 70%, var(--ground));
 }
 
 .hb-card:focus-visible .hb-card__face {
@@ -261,28 +454,11 @@
   outline-offset: 5px;
 }
 
-.hb-card__edge-top,
-.hb-card__edge-side {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform-origin: 0 0;
-  background: color-mix(in srgb, var(--ground-high) 70%, var(--ink));
-  transition: background-color var(--duration) var(--ease-out);
-}
-
-.hb-card__edge-top {
-  transform: translateZ(-6px) rotateX(90deg);
-}
-
-.hb-card__edge-side {
-  transform: translateZ(-6px) rotateY(-90deg);
-  background: var(--ground-raised);
-}
-
-.hb-card.is-active .hb-card__edge-top,
-.hb-card.is-active .hb-card__edge-side {
-  background: color-mix(in srgb, var(--accent) 78%, black);
+.hb-card__top,
+.hb-card__title,
+.hb-card__blurb,
+.hb-card__foot {
+  position: relative;
 }
 
 .hb-card__top {
@@ -292,26 +468,21 @@
 }
 
 .hb-card__num {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--accent);
-  transition: color var(--duration) var(--ease-out);
-}
-
-.hb-card.is-active .hb-card__num {
-  color: var(--accent-ink);
+  opacity: 0.85;
 }
 
 .hb-card__icon {
-  width: 22px;
-  height: 22px;
-  opacity: 0.8;
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
 }
 
 .hb-card__title {
   margin-top: 14px;
-  font-size: 36px;
+  font-size: 34px;
   font-weight: 700;
   letter-spacing: -0.035em;
   line-height: 0.95;
@@ -321,7 +492,7 @@
   margin-top: 10px;
   font-size: 14px;
   line-height: 1.35;
-  opacity: 0.74;
+  opacity: 0.72;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -338,19 +509,30 @@
   width: 100%;
   height: 92px;
   object-fit: cover;
-  border-radius: 3px;
-  filter: grayscale(0.4) contrast(1.05);
+  border-radius: 6px;
+  opacity: 0.26;
+  filter: grayscale(1) contrast(1.1);
+  mix-blend-mode: luminosity;
+  transition:
+    opacity var(--duration) var(--ease-out),
+    filter var(--duration) var(--ease-out);
+}
+
+.hb-card.is-active .hb-card__image {
+  opacity: 0.9;
+  filter: none;
+  mix-blend-mode: normal;
 }
 
 .hb-card__mark {
-  width: 76px;
-  height: 76px;
-  opacity: 0.32;
-  stroke-width: 1;
+  width: 72px;
+  height: 72px;
+  opacity: 0.55;
+  stroke-width: 1.1;
 }
 
 .hb-card.is-active .hb-card__mark {
-  opacity: 0.6;
+  opacity: 1;
 }
 
 /* Caption */
@@ -380,15 +562,18 @@
   color: var(--ink-soft);
 }
 
+.hb-caption__num,
+.hb-caption__arrow {
+  color: var(--hl, var(--accent));
+}
+
 .hb-caption__num {
-  color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 
 .hb-caption__arrow {
   width: 0.9em;
   height: 0.9em;
-  color: var(--accent);
 }
 
 .hb-caption__blurb {
@@ -415,7 +600,7 @@
 }
 
 .hb-particles span:nth-child(3n) {
-  background: var(--accent);
+  background: var(--rim);
   opacity: 0.35;
 }
 
@@ -429,8 +614,6 @@
     opacity: 0.34;
   }
 }
-
-/* Tablet portrait: stack intro, case and caption vertically */
 
 @media (max-width: 1279px) and (orientation: landscape) {
   .hb-scaler {
@@ -453,7 +636,7 @@
   }
 }
 
-/* Phones: drawer list */
+/* Phones: drawer list of glass rows */
 
 .hb--mobile {
   height: auto;
@@ -478,23 +661,25 @@
 
 .hb-drawer {
   margin-top: 24px;
-  border-radius: 10px;
+  border-radius: 14px;
   background: var(--hb-floor);
   box-shadow:
-    inset 0 1px 0 var(--hb-line),
-    0 24px 48px -20px color-mix(in srgb, black 80%, transparent);
+    inset 0 0 0 1px var(--rim-soft),
+    inset 0 1.5px 0 var(--rim-edge),
+    0 28px 48px -20px black;
   overflow: hidden;
 }
 
 .hb-drawer__cards {
   display: grid;
-  gap: 6px;
+  gap: 10px;
   margin: 0;
-  padding: 10px 10px 12px;
+  padding: 16px 12px 14px;
   list-style: none;
 }
 
 .hb-tab {
+  position: relative;
   display: grid;
   grid-template-columns: 2.25rem 1fr auto;
   align-items: center;
@@ -502,30 +687,40 @@
   width: 100%;
   min-height: 60px;
   padding: 10px 16px 10px 14px;
-  border: 0;
-  border-radius: var(--radius-card);
-  background:
-    linear-gradient(to bottom, color-mix(in srgb, var(--ink) 7%, transparent), transparent 60%),
-    var(--ground-high);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink) 14%, transparent);
+  overflow: hidden;
+  border: 1.5px solid;
+  border-top-width: 2px;
+  border-color: var(--edge-hi) var(--edge-lo) var(--edge-lo) var(--edge-hi);
+  border-radius: var(--hb-radius);
+  background-color: var(--glass);
+  background-image:
+    radial-gradient(42% 110% at 100% 20%, var(--glare), transparent 75%),
+    linear-gradient(to bottom, color-mix(in srgb, white 5%, transparent), transparent 50%);
+  box-shadow:
+    inset 0 0 18px var(--inner-glow),
+    inset 0 1px 0 color-mix(in srgb, var(--edge-hi) 45%, transparent),
+    0 2px 0 0 var(--edge-lo),
+    0 0 16px 1px var(--bloom),
+    0 0 44px 6px var(--bloom-wide);
+  color: var(--etch);
   text-align: left;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition:
-    background-color 200ms var(--ease-out),
-    color 200ms var(--ease-out),
-    transform 200ms var(--ease-out);
+    background-color 220ms var(--ease-out),
+    border-color 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out),
+    color 220ms var(--ease-out),
+    transform 220ms var(--ease-out);
 }
 
 .hb-tab:active,
 .hb-tab:focus-visible {
-  background: var(--accent);
-  color: var(--accent-ink);
   transform: translateY(-3px);
 }
 
 .hb-tab:focus-visible {
-  outline-offset: 2px;
+  outline-offset: 3px;
   outline-color: var(--ink);
 }
 
@@ -533,12 +728,7 @@
   font-size: 0.875rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--accent);
-}
-
-.hb-tab:active .hb-tab__num,
-.hb-tab:focus-visible .hb-tab__num {
-  color: inherit;
+  opacity: 0.85;
 }
 
 .hb-tab__text {
@@ -558,7 +748,7 @@
   overflow: hidden;
   font-size: 0.8125rem;
   line-height: 1.3;
-  opacity: 0.7;
+  opacity: 0.72;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -566,7 +756,7 @@
 .hb-tab__icon {
   width: 22px;
   height: 22px;
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
 .hb-drawer__front {
@@ -575,15 +765,15 @@
   justify-content: center;
   gap: 4px 10px;
   padding: 18px 16px 20px;
-  background: linear-gradient(to bottom, var(--ground-high), var(--ground-raised));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink) 16%, transparent);
-  color: var(--ink-soft);
+  background: linear-gradient(to bottom, var(--hb-wall), var(--hb-wall-dark));
+  box-shadow: inset 0 1.5px 0 var(--rim-edge);
+  color: var(--rim-soft);
   font-size: 0.9375rem;
   font-weight: 500;
 }
 
 .hb-drawer__front strong {
-  color: var(--ink);
+  color: var(--rim-edge);
   font-weight: 700;
 }
 

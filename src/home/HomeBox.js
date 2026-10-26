@@ -25,6 +25,20 @@ const CARD_INSET = 84;
 const CARD_STEP = (W - 2 * CARD_INSET) / (homeCards.length - 1);
 const LID_ANGLE = 100;
 
+// Cards are extruded slabs: a stack of rim outlines between the glass face and a tinted back plate.
+const CARD_DEPTH = 7;
+const CARD_RADIUS = 12;
+const rimLayers = Array.from({ length: CARD_DEPTH - 1 }, (_, i) => i + 1);
+const edgeTop = `translate3d(${CARD_RADIUS}px, 0px, ${-CARD_DEPTH}px) rotateX(90deg)`;
+const edgeSide = `translate3d(0px, ${CARD_RADIUS}px, ${-CARD_DEPTH}px) rotateY(-90deg)`;
+
+// The glossy floor has to cover everything the mirrored scene projects onto, which reaches far toward the viewer.
+const GLOSS_X = -900;
+const GLOSS_Y = -700;
+const GLOSS_W = W + 1900;
+const GLOSS_D = D + 1800;
+const mirrorFaceKeys = new Set(["floor", "out-back", "out-left", "out-right"]);
+
 const CAMERA_X = 57;
 const CAMERA_Z = 29;
 const DRIFT = 3.2;
@@ -69,6 +83,9 @@ const lidFaces = [
   { key: "lid-left", tone: "side", w: D, h: T, t: facingLeft(0, 0, T) },
   { key: "lid-right", tone: "side", w: D, h: T, t: facingRight(W, 0, D, T) },
 ];
+
+const cardX = (index) => CARD_INSET + index * CARD_STEP;
+const cardTransform = (index) => facingRight(cardX(index), CARD_Y, CARD_W, CARD_H);
 
 const size = (w, h) => ({ width: `${w}px`, height: `${h}px` });
 
@@ -129,7 +146,7 @@ function Intro() {
 
 function Caption({ card, index }) {
   return (
-    <div className="hb-caption">
+    <div className="hb-caption" data-card={card?.id}>
       {card ? (
         <>
           <p className="hb-caption__line">
@@ -146,6 +163,26 @@ function Caption({ card, index }) {
         </>
       )}
     </div>
+  );
+}
+
+function CardSlab({ children }) {
+  return (
+    <span className="hb-card__body">
+      <span className="hb-card__back" style={{ transform: `translateZ(${-CARD_DEPTH}px)` }} />
+      {rimLayers.map((depth) => (
+        <span key={depth} className="hb-card__ring" style={{ transform: `translateZ(${-depth}px)` }} />
+      ))}
+      <span
+        className="hb-card__edge hb-card__edge--top"
+        style={{ ...size(CARD_W - 2 * CARD_RADIUS, CARD_DEPTH), transform: edgeTop }}
+      />
+      <span
+        className="hb-card__edge hb-card__edge--side"
+        style={{ ...size(CARD_DEPTH, CARD_H - 2 * CARD_RADIUS), transform: edgeSide }}
+      />
+      <span className="hb-card__face">{children}</span>
+    </span>
   );
 }
 
@@ -231,12 +268,36 @@ function BoxScene({ activeIndex, setActiveIndex, cardRefs, onOpen }) {
             className={`hb-world${activeIndex !== null ? " has-active" : ""}`}
             style={{ ...size(W, D), marginLeft: `${-W / 2 + SCENE_SHIFT_X}px`, marginTop: `${-D / 2}px`, transform: worldTransform }}
           >
+            <span className="hb-gloss" style={{ ...size(GLOSS_W, GLOSS_D), transform: flat(GLOSS_X, GLOSS_Y, -2) }} />
             <span className="hb-shadow" style={{ ...size(W + 160, D + 160), transform: flat(-80, -40, -1) }} />
+
+            <span className="hb-mirror" aria-hidden="true">
+              {boxFaces
+                .filter((face) => mirrorFaceKeys.has(face.key))
+                .map((face) => (
+                  <span
+                    key={face.key}
+                    className={`hb-face hb-face--${face.tone} hb-face--${face.key}`}
+                    style={{ ...size(face.w, face.h), transform: face.t }}
+                  />
+                ))}
+              <span className="hb-face hb-face--front" style={{ ...size(W, H), transform: facingFront(0, D, H) }} />
+              {homeCards.map((card, index) => (
+                <span
+                  key={card.id}
+                  data-card={card.id}
+                  className={`hb-card hb-card--ghost${activeIndex === index ? " is-active" : ""}`}
+                  style={{ ...size(CARD_W, CARD_H), transform: cardTransform(index) }}
+                >
+                  <CardSlab />
+                </span>
+              ))}
+            </span>
 
             {boxFaces.map((face) => (
               <span
                 key={face.key}
-                className={`hb-face hb-face--${face.tone}`}
+                className={`hb-face hb-face--${face.tone} hb-face--${face.key}`}
                 style={{ ...size(face.w, face.h), transform: face.t }}
               />
             ))}
@@ -256,28 +317,29 @@ function BoxScene({ activeIndex, setActiveIndex, cardRefs, onOpen }) {
               {lidFaces.map((face) => (
                 <span
                   key={face.key}
-                  className={`hb-face hb-face--${face.tone}`}
+                  className={`hb-face hb-face--${face.tone} hb-face--${face.key}`}
                   style={{ ...size(face.w, face.h), transform: face.t }}
                 />
               ))}
             </span>
 
             {homeCards.map((card, index) => {
-              const x = CARD_INSET + index * CARD_STEP;
               const isActive = activeIndex === index;
               return (
                 <React.Fragment key={card.id}>
                   <span
+                    data-card={card.id}
                     className={`hb-spill${isActive ? " is-active" : ""}`}
-                    style={{ ...size(170, D - 2 * T), transform: flat(x - 20, T, 1) }}
+                    style={{ ...size(220, D - 2 * T), transform: flat(cardX(index) - 30, T, 1) }}
                   />
                   <button
                     type="button"
                     ref={(node) => {
                       cardRefs.current[index] = node;
                     }}
+                    data-card={card.id}
                     className={`hb-card${isActive ? " is-active" : ""}`}
-                    style={{ ...size(CARD_W, CARD_H), transform: facingRight(x, CARD_Y, CARD_W, CARD_H) }}
+                    style={{ ...size(CARD_W, CARD_H), transform: cardTransform(index) }}
                     aria-label={`Open ${card.title}`}
                     onPointerEnter={() => setActiveIndex(index)}
                     onPointerLeave={() => setActiveIndex((current) => (current === index ? null : current))}
@@ -286,13 +348,9 @@ function BoxScene({ activeIndex, setActiveIndex, cardRefs, onOpen }) {
                     onKeyDown={(event) => moveFocus(event, index, cardRefs)}
                     onClick={() => onOpen(card)}
                   >
-                    <span className="hb-card__body">
-                      <span className="hb-card__face">
-                        <CardContent card={card} index={index} />
-                      </span>
-                      <span className="hb-card__edge-top" style={size(CARD_W, 6)} />
-                      <span className="hb-card__edge-side" style={size(6, CARD_H)} />
-                    </span>
+                    <CardSlab>
+                      <CardContent card={card} index={index} />
+                    </CardSlab>
                   </button>
                 </React.Fragment>
               );
@@ -315,6 +373,7 @@ function DrawerList({ cardRefs, onOpen }) {
               ref={(node) => {
                 cardRefs.current[index] = node;
               }}
+              data-card={card.id}
               className="hb-tab"
               aria-label={`Open ${card.title}`}
               onKeyDown={(event) => moveFocus(event, index, cardRefs)}
