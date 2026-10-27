@@ -4,7 +4,6 @@ import {
   motion,
   useMotionTemplate,
   useMotionValue,
-  useReducedMotion,
   useSpring,
   useTransform,
 } from "framer-motion";
@@ -236,8 +235,6 @@ const particleSeeds = [
 function BoxScene({ activeIndex, setActiveIndex, cardRefs, onOpen }) {
   const stageRef = useRef(null);
   const scale = useFitScale(stageRef);
-  const reduceMotion = useReducedMotion();
-
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const springX = useSpring(pointerX, { stiffness: 70, damping: 16, mass: 0.7 });
@@ -247,26 +244,22 @@ function BoxScene({ activeIndex, setActiveIndex, cardRefs, onOpen }) {
   const worldTransform = useMotionTemplate`rotateX(${rotateX}deg) rotateZ(${rotateZ}deg)`;
 
   useEffect(() => {
-    if (reduceMotion) {
-      pointerX.set(0);
-      pointerY.set(0);
-      return undefined;
-    }
     const handleMove = (event) => {
       pointerX.set((event.clientX / window.innerWidth) * 2 - 1);
       pointerY.set((event.clientY / window.innerHeight) * 2 - 1);
     };
-    const handleLeave = () => {
+    const handleOut = (event) => {
+      if (event.relatedTarget) return;
       pointerX.set(0);
       pointerY.set(0);
     };
     window.addEventListener("pointermove", handleMove, { passive: true });
-    document.documentElement.addEventListener("pointerleave", handleLeave);
+    document.addEventListener("mouseout", handleOut);
     return () => {
       window.removeEventListener("pointermove", handleMove);
-      document.documentElement.removeEventListener("pointerleave", handleLeave);
+      document.removeEventListener("mouseout", handleOut);
     };
-  }, [reduceMotion, pointerX, pointerY]);
+  }, [pointerX, pointerY]);
 
   return (
     <div className="hb-stage" ref={stageRef}>
