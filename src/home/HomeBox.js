@@ -41,7 +41,8 @@ const mirrorFaceKeys = new Set(["floor", "out-back", "out-left", "out-right"]);
 
 const CAMERA_X = 57;
 const CAMERA_Z = 29;
-const DRIFT = 3.2;
+// Degrees the camera swings toward the pointer at the viewport edge. Past ~9 the open box shows its seams.
+const DRIFT = 7;
 
 // Size of the projected scene (box plus open lid) at scale 1, used to fit the viewport.
 const SCENE_W = 960;
@@ -240,8 +241,8 @@ function BoxScene({ activeIndex, setActiveIndex, cardRefs, onOpen }) {
 
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
-  const springX = useSpring(pointerX, { stiffness: 40, damping: 18, mass: 0.8 });
-  const springY = useSpring(pointerY, { stiffness: 40, damping: 18, mass: 0.8 });
+  const springX = useSpring(pointerX, { stiffness: 70, damping: 16, mass: 0.7 });
+  const springY = useSpring(pointerY, { stiffness: 70, damping: 16, mass: 0.7 });
   const rotateX = useTransform(springY, (v) => CAMERA_X - v * DRIFT);
   const rotateZ = useTransform(springX, (v) => CAMERA_Z - v * DRIFT);
   const worldTransform = useMotionTemplate`rotateX(${rotateX}deg) rotateZ(${rotateZ}deg)`;
@@ -256,8 +257,16 @@ function BoxScene({ activeIndex, setActiveIndex, cardRefs, onOpen }) {
       pointerX.set((event.clientX / window.innerWidth) * 2 - 1);
       pointerY.set((event.clientY / window.innerHeight) * 2 - 1);
     };
+    const handleLeave = () => {
+      pointerX.set(0);
+      pointerY.set(0);
+    };
     window.addEventListener("pointermove", handleMove, { passive: true });
-    return () => window.removeEventListener("pointermove", handleMove);
+    document.documentElement.addEventListener("pointerleave", handleLeave);
+    return () => {
+      window.removeEventListener("pointermove", handleMove);
+      document.documentElement.removeEventListener("pointerleave", handleLeave);
+    };
   }, [reduceMotion, pointerX, pointerY]);
 
   return (
