@@ -246,6 +246,42 @@
     inset 0 0 0 21px var(--rim-faint);
 }
 
+/* Light from the lifted card falling on the inside of the lid; the hinge is the face's bottom edge */
+.hb-face--lid-inner {
+  overflow: hidden;
+}
+
+.hb-lid-light {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background:
+    radial-gradient(
+      50% 85% at 50% 100%,
+      color-mix(in srgb, var(--hl) 46%, transparent),
+      color-mix(in srgb, var(--hl) 18%, transparent) 55%,
+      transparent 100%
+    ),
+    linear-gradient(to top, color-mix(in srgb, var(--hl) 30%, transparent) 0 3px, transparent 3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration) var(--ease-out);
+}
+
+.hb-lid-light::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -600px;
+  right: -600px;
+  background: linear-gradient(to top, color-mix(in srgb, var(--hl) 14%, transparent), transparent 80%);
+}
+
+.hb-lid-light.is-active {
+  opacity: 1;
+}
+
 .hb-face--lid-outer {
   background: var(--hb-wall-dark);
 }

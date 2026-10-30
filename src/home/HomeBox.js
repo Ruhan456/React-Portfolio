@@ -84,6 +84,7 @@ const lidFaces = [
 ];
 
 const cardX = (index) => CARD_INSET + index * CARD_STEP;
+const LID_LIGHT_W = 360;
 const cardTransform = (index) => facingRight(cardX(index), CARD_Y, CARD_W, CARD_H);
 
 const size = (w, h) => ({ width: `${w}px`, height: `${h}px` });
@@ -320,7 +321,17 @@ function BoxScene({ activeIndex, setActiveIndex, cardRefs, onOpen }) {
                   key={face.key}
                   className={`hb-face hb-face--${face.tone} hb-face--${face.key}`}
                   style={{ ...size(face.w, face.h), transform: face.t }}
-                />
+                >
+                  {face.key === "lid-inner" &&
+                    homeCards.map((card, index) => (
+                      <span
+                        key={card.id}
+                        data-card={card.id}
+                        className={`hb-lid-light${activeIndex === index ? " is-active" : ""}`}
+                        style={{ left: `${cardX(index) - LID_LIGHT_W / 2}px`, width: `${LID_LIGHT_W}px` }}
+                      />
+                    ))}
+                </span>
               ))}
             </span>
 
