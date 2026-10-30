@@ -3,7 +3,7 @@ import { experiences, profile, projects } from "../components/portfolioData";
 export const homeCards = [
   {
     id: "work",
-    title: "Work",
+    title: "Projects",
     blurb: `${projects.length} projects across software, firmware and mechanical design.`,
     to: "/work",
     image: "/images/portfolio/thumbnails/robotic-hand.jpg",

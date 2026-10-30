@@ -4,7 +4,7 @@ import { profile } from "../components/portfolioData";
 import "./SiteHeader.css";
 
 const links = [
-  { to: "/work", label: "Work" },
+  { to: "/work", label: "Projects" },
   { to: "/experience", label: "Experience" },
   { to: "/about", label: "About" },
 ];

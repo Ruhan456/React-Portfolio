@@ -85,7 +85,7 @@ function WorkPage() {
     <main className="work-page">
       <header className="work-page__intro">
         <div className="work-page__heading">
-          <h1>Selected work</h1>
+          <h1>Projects</h1>
           <p>Firmware, robotics, factory tooling and software, built at work, at school and on my own.</p>
         </div>
         <div className="work-page__filters" role="group" aria-label="Filter projects">

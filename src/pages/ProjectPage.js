@@ -33,7 +33,7 @@ function ProjectPage() {
         title={project.title}
         lede={project.overview}
         backTo={backTo}
-        backLabel="Back to work"
+        backLabel="Back to projects"
         size="large"
       >
         <motion.div className="project-page__meta" {...metaMotion}>
@@ -120,7 +120,7 @@ function ProjectPage() {
 
       <p className="project-page__back">
         <Link className="text-link" to={backTo}>
-          Back to all work
+          Back to all projects
         </Link>
       </p>
     </main>
