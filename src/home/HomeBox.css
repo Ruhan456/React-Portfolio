@@ -59,7 +59,7 @@
 .hb-intro {
   position: absolute;
   z-index: 2;
-  top: calc(var(--header-height) + clamp(20px, 4vh, 48px));
+  top: 18px;
   left: var(--margin);
   max-width: min(25rem, 29vw);
   pointer-events: none;

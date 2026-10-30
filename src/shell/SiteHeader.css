@@ -20,6 +20,25 @@
   font-size: 1.125rem;
   letter-spacing: -0.02em;
   text-decoration: none;
+  clip-path: inset(-4px 0 -4px 0);
+  transition:
+    clip-path 1100ms var(--ease-out) 150ms,
+    letter-spacing 1100ms var(--ease-out) 150ms,
+    opacity 900ms ease 150ms,
+    visibility 0s;
+}
+
+.site-header--home .site-header__wordmark {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  clip-path: inset(-4px 100% -4px 0);
+  letter-spacing: -0.12em;
+  transition:
+    clip-path 800ms var(--ease-out),
+    letter-spacing 800ms var(--ease-out),
+    opacity 700ms ease,
+    visibility 0s 800ms;
 }
 
 .site-header__links {

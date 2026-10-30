@@ -13,7 +13,7 @@
   --size-body: 1.0625rem;
   --size-small: 0.875rem;
 
-  --margin: clamp(16px, 2.4vw, 32px);
+  --margin: clamp(20px, 4vw, 64px);
   --header-height: 72px;
   --section-gap: clamp(120px, 16vw, 240px);
   --radius-card: 6px;
